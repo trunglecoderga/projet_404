@@ -1,0 +1,8 @@
+x := 5 ;
+lire (a) ;
+y := x + 1 ;
+si x >> a alors
+    y := x;
+sinon
+    y := x - 1;
+fsi 
