@@ -32,5 +32,5 @@ Ast creer_ecrire(Ast a);
 
 Ast creer_if(Ast a, Ast b, Ast c);
 // creer un noeud N_IF de fils a, b, c
-
+Ast creer_cond(TypeCond c,Ast ag,Ast ad);
 #endif

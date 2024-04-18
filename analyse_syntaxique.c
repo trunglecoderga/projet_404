@@ -19,11 +19,42 @@ void Rec_pgm(Ast *resultat) {
     Rec_seq_inst(resultat);
 }
 
+void type_cond(TypeCond *c){
+    char *lexeme = lexeme_courant().chaine; // Assuming lexeme_courant() returns a structure with a string field 'chaine'
+
+    if (strcmp(lexeme, "<=") == 0) {
+        *c = N_INFEGAL;
+    } else if (strcmp(lexeme, ">=") == 0) {
+        *c = N_SUPEGAL;
+    } else if (strcmp(lexeme, "==") == 0) {
+        *c = N_EGAL;
+    } else if (strcmp(lexeme, "!=") == 0) {
+        *c = N_DIFF;
+    } else if (strcmp(lexeme, "<<") == 0) {
+        *c = N_INF;
+    } else if (strcmp(lexeme, ">>") == 0) {
+        *c = N_SUP;
+    } else {
+        printf("erreur type de condition\n");
+        exit(1);
+    }
+}
+
 void Rec_condition(Ast *Acond) {
-    Rec_eag(Acond);
+    Ast Ag,Ad;
+    int t ;
+    TypeCond c;
+    Rec_eag(&Ag);
+    t = evaluation(Ag);
+    printf("Ag valeur = %d\n",t);
     if (lexeme_courant().nature == OPCOMP) {
+        printf("condition = %s\n",lexeme_courant().chaine);
+        type_cond(&c);
+    printf("Condition = %d\n",c);
         avancer();
-        Rec_eag(Acond);
+        Rec_eag(&Ad);
+        printf("Ad valeur = %d\n",Ad->valeur);
+        *Acond = creer_cond(c,Ag,Ad);
     } else {
         printf("Erreur: Opérateur de comparaison manquant\n");
         exit(1);
@@ -121,7 +152,9 @@ void Rec_inst(Ast *resultat) {
                     Rec_seq_inst(&Aelse);
                     if (lexeme_courant().nature==FSI) {
                         avancer();
+                        printf("testif2\n");
                         *resultat = creer_if(Acond, Athen, Aelse);
+                        //printf("test if ");
                         interpreter_si_alors_sinon(*resultat);
                     } else {
                         printf("Erreur: FSI manquant\n");
