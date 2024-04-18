@@ -98,3 +98,13 @@ Ast creer_if(Ast a, Ast b, Ast c){
       expr->droite = c;
       return expr;
 }
+
+Ast creer_cond(TypeCond c,Ast ag,Ast ad){
+      Ast expr;
+      expr = (Ast) malloc (sizeof(NoeudAst));
+      expr->nature = N_COND;
+      expr->cond = c ;      
+      expr->gauche = ag;
+      expr->droite = ad;
+      return expr;
+}
