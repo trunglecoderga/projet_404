@@ -25,6 +25,16 @@ extern int estPresentTS(char *idf, int *v, Couple TS[], int NbSymb) {
     return 0;
 }
 
+
+extern int estPresentTS2(char *idf,Couple TS[], int NbSymb){
+    for (int i = 0; i < NbSymb; i++) {
+        if (strcmp(TS[i].nom, idf) == 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 extern void insererTS(char *idf, int v, Couple TS[], int *NbSymb) {
     int t = 0;
     for (int i = 0; i < *NbSymb; i++) {

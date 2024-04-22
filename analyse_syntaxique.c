@@ -10,7 +10,7 @@
 
 Couple TS[NBMAXSYMB];
 int NbSymb;
-
+int c = 1; //condition
 
 //azeu
 
@@ -53,7 +53,6 @@ void Rec_condition(Ast *Acond) {
     printf("Condition = %d\n",c);
         avancer();
         Rec_eag(&Ad);
-        printf("Ad valeur = %d\n",Ad->valeur);
         *Acond = creer_cond(c,Ag,Ad);
     } else {
         printf("Erreur: Opérateur de comparaison manquant\n");
@@ -92,7 +91,11 @@ void Rec_inst(Ast *resultat) {
                 avancer();
                 Rec_eag(&Ad);
                 *resultat = creer_aff(Ag, Ad);
-                interpreter_aff(*resultat);
+                if(c==1){
+                interpreter_aff(*resultat);}
+                else{
+                    if(estPresentTS2(Ag->ident,TS,NbSymb)==0){          
+                    insererTS(Ag->ident,0,TS,&NbSymb);}}
             } else {
                 printf("Erreur: Instruction invalide (pas de AFF suivant IDF)\n");
                 exit(1);
@@ -107,7 +110,8 @@ void Rec_inst(Ast *resultat) {
                     //insererTS(lexeme_courant().chaine,0,TS,&NbSymb);
                     avancer();
                     *resultat = creer_lire(Ag);
-                    interpreter_lire(*resultat);
+                    if(c==1){
+                    interpreter_lire(*resultat);}
                     if (lexeme_courant().nature == PARF) {
                         avancer();
                     } else {
@@ -129,7 +133,8 @@ void Rec_inst(Ast *resultat) {
                 avancer();
                 Rec_eag(&Ag);
                 *resultat = creer_ecrire(Ag);
-                interpreter_ecrire(*resultat);
+                if(c==1){
+                interpreter_ecrire(*resultat);}
                 if (lexeme_courant().nature == PARF) {
                     avancer();
                 } else {
@@ -144,18 +149,22 @@ void Rec_inst(Ast *resultat) {
         case SI:
             avancer();
             Rec_condition(&Acond);
+            c = valeur_booleenne(Acond);
             if (lexeme_courant().nature==ALORS) {
                 avancer();
                 Rec_seq_inst(&Athen);
+                c++;
                 if (lexeme_courant().nature==SINON) {
                     avancer();
                     Rec_seq_inst(&Aelse);
                     if (lexeme_courant().nature==FSI) {
                         avancer();
-                        printf("testif2\n");
+                       
                         *resultat = creer_if(Acond, Athen, Aelse);
-                        //printf("test if ");
+                        
                         interpreter_si_alors_sinon(*resultat);
+                        afficheTS(TS,NbSymb);
+                        c=1;
                     } else {
                         printf("Erreur: FSI manquant\n");
                         exit(1);
@@ -324,7 +333,7 @@ void Rec_op2(TypeOperateur *Op)
 void Rec_aff(Ast *resultat) 
 {
     Ast A; 
-    int v;              // valeur de IDF
+   // int v;              // valeur de IDF
     char idf[LIDF];     //nom de IDF
 
     if (lexeme_courant().nature==IDF) {
@@ -334,8 +343,7 @@ void Rec_aff(Ast *resultat)
             avancer();
             Rec_eag(&A);
             //afficher_ast(A);
-            v = evaluation(A);           //à décommenter
-            insererTS(idf, v, TS, &NbSymb);
+            interpreter_aff(A);
             if (lexeme_courant().nature==SEPAFF) {
                 avancer();
             } else {
