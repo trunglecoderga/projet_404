@@ -134,6 +134,9 @@ void interpreter_aff(Ast A){
 	char idf[20];
 	int v;
 	strcpy(idf,A->gauche->ident);
+	if(strlen(idf)==0){
+		return;
+	}
 	v = evaluation(A->droite);
 	insererTS(idf,v,TS,&NbSymb);
 }
@@ -155,14 +158,14 @@ void interpreter_ecrire(Ast A){
 }
 
 void interpreter_si_alors_sinon(Ast A) {
-	printf("interpretation:\n");
-	printf("valeur = %d\n",A->gauche->nature);
+	//printf("interpretation:\n");
+	//printf("valeur = %d\n",A->gauche->nature);
 	int condition = valeur_booleenne(A->gauche);
-			printf("cond = %d:\n",condition);
 	if (condition==1) {
-		interpreter(A->milieu);
-	} else {
-		interpreter(A->droite);
+		interpreter(A->milieu->gauche);	
+		return;
+	} else if (condition == 0) {
+		interpreter(A->droite->gauche);
 	}
 
 }
@@ -170,10 +173,10 @@ void interpreter_si_alors_sinon(Ast A) {
 int valeur_booleenne(Ast A){
 	int valeurg, valeurd;
 	valeurg = evaluation(A->gauche);
-	printf("valg = %d\n",valeurg);
+	//printf("valg = %d\n",valeurg);
 	valeurd = evaluation(A->droite);
-	printf("vald = %d\n",valeurd);
-	printf("nature comparaison:%d\n",A->nature);
+	//printf("vald = %d\n",valeurd);
+	//printf("nature comparaison:%d\n",A->nature);
 	switch (A->cond) {
 		case N_SUP:
 			return  valeurg > valeurd;

@@ -26,6 +26,11 @@ extern void afficheTS(Couple TS[], int NbSymb);
 // sinon
 //      estPresentTS renvoie faux
 
+extern int estPresentTS2(char *idf,Couple TS[], int NbSymb);
+// si idf est present dans la TS, renvoie vrai sinon renvoie faux
+// pas de nouvelle valeur affectée a idf
+
+
  extern void insererTS(char *idf, int v,Couple TS[], int *NbSymb) ;
 // si un couple (idf,v') est present dans la table alors 
 //      remplace la valeur v' par v 
