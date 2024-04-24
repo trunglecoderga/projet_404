@@ -76,8 +76,8 @@
    //       - un nouveau lexeme est reconnu dans lexeme_en_cours
    //       - le caractere courant est soit la fin de fichier, 
    //		soit un separateur,  soit le 1er caractere d'un lexeme
-   char motCle[6][20] = {"lire", "ecrire", "si", "alors", "sinon", "fsi"};
-   #define NB_MOTCLE 6
+   char motCle[9][20] = {"lire", "ecrire", "si", "alors", "sinon", "fsi","tanque","faire","fait"};
+  
    void reconnaitre_lexeme() {
       typedef enum {E_INIT, E_AFF, E_IDF, E_ENTIER, E_FIN, E_COMP_EGAL, E_COMP_SUP, E_COMP_INF} Etat_Automate ;
       Etat_Automate etat=E_INIT;
@@ -266,6 +266,15 @@
                            case 5:  
                               lexeme_en_cours.nature = FSI;
                               break;
+                           case 6:
+                              lexeme_en_cours.nature = TANQUE;
+                              break;
+                           case 7:
+                              lexeme_en_cours.nature = FAIRE;
+                              break;
+                           case 8:
+                              lexeme_en_cours.nature = FAIT;
+                              break;
                         }
                      }
                   }
@@ -420,6 +429,9 @@
       case SINON: return "SINON";
       case ALORS: return "ALORS";
       case FSI: return "FSI";
+      case TANQUE: return "TANQUE";
+      case FAIRE : return "FAIRE";
+      case FAIT: return "FAIT";
       default: return "ERREUR" ;            
 	} ;
    } 

@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
 
         // Affiche l'arbre
         //afficher_ast(arbre);
-        afficheTS(TS, NbSymb);
+       // afficheTS(TS, NbSymb);
         printf("fin!\n"); 
         
     }

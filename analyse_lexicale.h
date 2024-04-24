@@ -8,7 +8,7 @@
 -- 2 aout 2006 - PH :
 -- remplacement record a champs variants par record "plat"
 ------------------------------------------------------------------------ */
-#define NB_MOTCLE 6
+#define NB_MOTCLE 9
 
    typedef enum {
 	  ERREUR_CAR,   // caractere incorrect
@@ -38,7 +38,10 @@
       SI ,              // ( si )
       ALORS,            // ( alors )
       SINON,            // ( sinon )
-      FSI               // ( fsi )
+      FSI,               // ( fsi )
+      TANQUE,
+      FAIRE,
+      FAIT
     } Nature_Lexeme ;
 
 

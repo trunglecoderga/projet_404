@@ -108,3 +108,12 @@ Ast creer_cond(TypeCond c,Ast ag,Ast ad){
       expr->droite = ad;
       return expr;
 }
+
+Ast creer_while(Ast ag, Ast ad){
+      Ast expr;
+      expr = (Ast) malloc (sizeof(NoeudAst));
+      expr->nature = N_WHILE;
+      expr->gauche = ag;
+      expr->droite = ad;
+      return expr;
+}

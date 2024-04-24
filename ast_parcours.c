@@ -173,9 +173,9 @@ void interpreter_si_alors_sinon(Ast A) {
 int valeur_booleenne(Ast A){
 	int valeurg, valeurd;
 	valeurg = evaluation(A->gauche);
-	//printf("valg = %d\n",valeurg);
+	printf("valg = %d\n",valeurg);
 	valeurd = evaluation(A->droite);
-	//printf("vald = %d\n",valeurd);
+	printf("vald = %d\n",valeurd);
 	//printf("nature comparaison:%d\n",A->nature);
 	switch (A->cond) {
 		case N_SUP:
@@ -200,4 +200,17 @@ int valeur_booleenne(Ast A){
 			printf("erreur concernant évaluation de la condition\n");
 			exit(1);
 	}
+}
+
+
+
+
+void interpreter_while(Ast A){
+	//int c = valeur_booleenne(A->gauche);
+	while(valeur_booleenne(A->gauche)){
+		printf("cond = %d\n",valeur_booleenne(A->gauche));
+		interpreter(A->droite->gauche);
+		//c = valeur_booleenne(A->gauche);
+	}
+	return;
 }
