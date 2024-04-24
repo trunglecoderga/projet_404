@@ -80,7 +80,7 @@ void Rec_suite_seq_inst(Ast donnee, Ast *resultat) {
 }
 
 void Rec_inst(Ast *resultat) {
-    Ast Ag ,Ad, Acond, Athen, Aelse;
+    Ast Ag ,Ad, Acond, Athen, Aelse,Abody,Acond2;
     //printf("lexeme courant nature: %d\n", lexeme_courant().nature);   // pour débugger, à décommenter
     //afficheTS(TS, NbSymb);          // pour débugger
     switch (lexeme_courant().nature) {
@@ -176,6 +176,30 @@ void Rec_inst(Ast *resultat) {
             } else {
                 printf("Erreur: ALORS manquant\n");
                 exit(1); 
+            }
+            break;
+        case TANQUE:
+            avancer();
+            Rec_condition(&Acond2);
+            if(lexeme_courant().nature == FAIRE){
+                avancer();
+                c=0;
+                Rec_seq_inst(&Abody);
+                if(lexeme_courant().nature == FAIT){
+                    avancer();
+                    printf("avant\n");
+                    afficheTS(TS,NbSymb);
+                    *resultat = creer_while(Acond2,Abody);
+                    interpreter_while(*resultat);
+                }
+                else{
+                    printf("Erreur : FAIT manquant\n");
+                    exit(1);
+                }
+            }
+            else{
+                printf("Erreur : FAIRE manquant\n");
+                exit(1);
             }
             
         default:

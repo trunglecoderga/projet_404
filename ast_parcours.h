@@ -13,6 +13,7 @@ void interpreter_aff(Ast A);
 void interpreter_lire(Ast A);
 void interpreter_ecrire(Ast A);
 void interpreter_si_alors_sinon(Ast A);
+void interpreter_while(Ast A);
 
 int valeur_booleenne(Ast A);
 #endif
