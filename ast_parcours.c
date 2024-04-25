@@ -108,8 +108,8 @@ int evaluation(Ast expr) {
 void interpreter(Ast A){
 	switch(A->nature){
 		case N_SEPINST:
-			interpreter_aff(A->gauche);
-			interpreter_aff(A->droite);
+			interpreter(A->gauche);
+			interpreter(A->droite);
 			break;
 		case N_AFF :
 			interpreter_aff(A);
@@ -162,10 +162,11 @@ void interpreter_si_alors_sinon(Ast A) {
 	//printf("valeur = %d\n",A->gauche->nature);
 	int condition = valeur_booleenne(A->gauche);
 	if (condition==1) {
-		interpreter(A->milieu->gauche);	
+		interpreter(A->milieu);	
 		return;
-	} else if (condition == 0) {
-		interpreter(A->droite->gauche);
+	} else {
+		printf("nature a droite = %d\n",A->droite->gauche->nature);
+		interpreter(A->droite);
 	}
 
 }
@@ -209,7 +210,7 @@ void interpreter_while(Ast A){
 	//int c = valeur_booleenne(A->gauche);
 	while(valeur_booleenne(A->gauche)){
 		printf("cond = %d\n",valeur_booleenne(A->gauche));
-		interpreter(A->droite->gauche);
+		interpreter(A->droite);
 		//c = valeur_booleenne(A->gauche);
 	}
 	return;

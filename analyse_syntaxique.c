@@ -19,21 +19,21 @@ void Rec_pgm(Ast *resultat) {
     Rec_seq_inst(resultat);
 }
 
-void type_cond(TypeCond *c){
+void type_cond(TypeCond *cond){
     char *lexeme = lexeme_courant().chaine; // Assuming lexeme_courant() returns a structure with a string field 'chaine'
 
     if (strcmp(lexeme, "<=") == 0) {
-        *c = N_INFEGAL;
+        *cond = N_INFEGAL;
     } else if (strcmp(lexeme, ">=") == 0) {
-        *c = N_SUPEGAL;
+        *cond = N_SUPEGAL;
     } else if (strcmp(lexeme, "==") == 0) {
-        *c = N_EGAL;
+        *cond = N_EGAL;
     } else if (strcmp(lexeme, "!=") == 0) {
-        *c = N_DIFF;
+        *cond = N_DIFF;
     } else if (strcmp(lexeme, "<<") == 0) {
-        *c = N_INF;
+        *cond = N_INF;
     } else if (strcmp(lexeme, ">>") == 0) {
-        *c = N_SUP;
+        *cond = N_SUP;
     } else {
         printf("erreur type de condition\n");
         exit(1);
@@ -43,17 +43,17 @@ void type_cond(TypeCond *c){
 void Rec_condition(Ast *Acond) {
     Ast Ag,Ad;
     int t ;
-    TypeCond c;
+    TypeCond cond;
     Rec_eag(&Ag);
     t = evaluation(Ag);
     printf("Ag valeur = %d\n",t);
     if (lexeme_courant().nature == OPCOMP) {
         printf("condition = %s\n",lexeme_courant().chaine);
-        type_cond(&c);
-    printf("Condition = %d\n",c);
+        type_cond(&cond);
+    printf("Condition = %d\n",cond);
         avancer();
         Rec_eag(&Ad);
-        *Acond = creer_cond(c,Ag,Ad);
+        *Acond = creer_cond(cond,Ag,Ad);
     } else {
         printf("Erreur: Opérateur de comparaison manquant\n");
         exit(1);
@@ -61,6 +61,7 @@ void Rec_condition(Ast *Acond) {
 }
 void Rec_seq_inst (Ast *resultat) {
     Ast A1;
+    printf("seq_inst c = %d\n",c);
     Rec_inst(&A1);
     Rec_suite_seq_inst(A1, resultat);
 }
@@ -150,18 +151,32 @@ void Rec_inst(Ast *resultat) {
             avancer();
             Rec_condition(&Acond);
             c = valeur_booleenne(Acond);
+            printf("c = %d\n",c);
             if (lexeme_courant().nature==ALORS) {
                 avancer();
                 Rec_seq_inst(&Athen);
-                c++;
+
+                //c++;
                 if (lexeme_courant().nature==SINON) {
                     avancer();
+                    switch(c){
+                        case 0:
+                        c = 1;
+                        break;
+                        case 1:
+                        c = 0;
+                        break;
+                        default:break;
+                    }
+                    printf("Sinon c = %d\n",c);
                     Rec_seq_inst(&Aelse);
                     if (lexeme_courant().nature==FSI) {
                         avancer();
                        
                         *resultat = creer_if(Acond, Athen, Aelse);
-                        
+
+                        printf("test 1000\n");
+                        afficheTS(TS,NbSymb);
                         interpreter_si_alors_sinon(*resultat);
                         afficheTS(TS,NbSymb);
                         c=1;
