@@ -61,7 +61,6 @@ void Rec_condition(Ast *Acond) {
 }
 void Rec_seq_inst (Ast *resultat) {
     Ast A1;
-    printf("seq_inst c = %d\n",c);
     Rec_inst(&A1);
     Rec_suite_seq_inst(A1, resultat);
 }
@@ -174,9 +173,6 @@ void Rec_inst(Ast *resultat) {
                         avancer();
                        
                         *resultat = creer_if(Acond, Athen, Aelse);
-
-                        printf("test 1000\n");
-                        afficheTS(TS,NbSymb);
                         interpreter_si_alors_sinon(*resultat);
                         afficheTS(TS,NbSymb);
                         c=1;
@@ -196,6 +192,7 @@ void Rec_inst(Ast *resultat) {
         case TANQUE:
             avancer();
             Rec_condition(&Acond2);
+            //c = valeur_booleenne(Acond2);
             if(lexeme_courant().nature == FAIRE){
                 avancer();
                 c=0;
@@ -228,7 +225,7 @@ void Rec_facteur(Ast *resultat) {
     int trouve;              // pour savoir si l'IDF est présent dans la TS
     switch (lexeme_courant().nature) {
     case ENTIER:
-        *resultat = creer_valeur(lexeme_courant().valeur);
+        *resultat = creer_valeur(lexeme_courant().valeur,lexeme_courant().chaine);
         avancer();
         /*if(lexeme_courant().nature == ENTIER){
             printf("erreur syntaxique\n");
@@ -258,7 +255,7 @@ void Rec_facteur(Ast *resultat) {
         //afficheTS(TS, NbSymb);
         trouve = estPresentTS(lexeme_courant().chaine, &v, TS, NbSymb);
         if (trouve==1) {
-            *resultat = creer_valeur(v);
+            *resultat = creer_valeur(v,lexeme_courant().chaine);
         } else {
             printf("erreur variable n'est pas définie\n");
             exit(1 );
