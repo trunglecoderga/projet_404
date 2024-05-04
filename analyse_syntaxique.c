@@ -19,21 +19,21 @@ void Rec_pgm(Ast *resultat) {
     Rec_seq_inst(resultat);
 }
 
-void type_cond(TypeCond *c){
+void type_cond(TypeCond *cond){
     char *lexeme = lexeme_courant().chaine; // Assuming lexeme_courant() returns a structure with a string field 'chaine'
 
     if (strcmp(lexeme, "<=") == 0) {
-        *c = N_INFEGAL;
+        *cond = N_INFEGAL;
     } else if (strcmp(lexeme, ">=") == 0) {
-        *c = N_SUPEGAL;
+        *cond = N_SUPEGAL;
     } else if (strcmp(lexeme, "==") == 0) {
-        *c = N_EGAL;
+        *cond = N_EGAL;
     } else if (strcmp(lexeme, "!=") == 0) {
-        *c = N_DIFF;
+        *cond = N_DIFF;
     } else if (strcmp(lexeme, "<<") == 0) {
-        *c = N_INF;
+        *cond = N_INF;
     } else if (strcmp(lexeme, ">>") == 0) {
-        *c = N_SUP;
+        *cond = N_SUP;
     } else {
         printf("erreur type de condition\n");
         exit(1);
@@ -43,17 +43,17 @@ void type_cond(TypeCond *c){
 void Rec_condition(Ast *Acond) {
     Ast Ag,Ad;
     int t ;
-    TypeCond c;
+    TypeCond cond;
     Rec_eag(&Ag);
     t = evaluation(Ag);
     printf("Ag valeur = %d\n",t);
     if (lexeme_courant().nature == OPCOMP) {
         printf("condition = %s\n",lexeme_courant().chaine);
-        type_cond(&c);
-    printf("Condition = %d\n",c);
+        type_cond(&cond);
+    printf("Condition = %d\n",cond);
         avancer();
         Rec_eag(&Ad);
-        *Acond = creer_cond(c,Ag,Ad);
+        *Acond = creer_cond(cond,Ag,Ad);
     } else {
         printf("Erreur: Opérateur de comparaison manquant\n");
         exit(1);
@@ -150,18 +150,29 @@ void Rec_inst(Ast *resultat) {
             avancer();
             Rec_condition(&Acond);
             c = valeur_booleenne(Acond);
+            printf("c = %d\n",c);
             if (lexeme_courant().nature==ALORS) {
                 avancer();
                 Rec_seq_inst(&Athen);
-                c++;
+
+                //c++;
                 if (lexeme_courant().nature==SINON) {
                     avancer();
+                    switch(c){
+                        case 0:
+                        c = 1;
+                        break;
+                        case 1:
+                        c = 0;
+                        break;
+                        default:break;
+                    }
+                    printf("Sinon c = %d\n",c);
                     Rec_seq_inst(&Aelse);
                     if (lexeme_courant().nature==FSI) {
                         avancer();
                        
                         *resultat = creer_if(Acond, Athen, Aelse);
-                        
                         interpreter_si_alors_sinon(*resultat);
                         afficheTS(TS,NbSymb);
                         c=1;
@@ -181,6 +192,7 @@ void Rec_inst(Ast *resultat) {
         case TANQUE:
             avancer();
             Rec_condition(&Acond2);
+            //c = valeur_booleenne(Acond2);
             if(lexeme_courant().nature == FAIRE){
                 avancer();
                 c=0;
@@ -213,7 +225,7 @@ void Rec_facteur(Ast *resultat) {
     int trouve;              // pour savoir si l'IDF est présent dans la TS
     switch (lexeme_courant().nature) {
     case ENTIER:
-        *resultat = creer_valeur(lexeme_courant().valeur);
+        *resultat = creer_valeur(lexeme_courant().valeur,lexeme_courant().chaine);
         avancer();
         /*if(lexeme_courant().nature == ENTIER){
             printf("erreur syntaxique\n");
@@ -243,7 +255,7 @@ void Rec_facteur(Ast *resultat) {
         //afficheTS(TS, NbSymb);
         trouve = estPresentTS(lexeme_courant().chaine, &v, TS, NbSymb);
         if (trouve==1) {
-            *resultat = creer_valeur(v);
+            *resultat = creer_valeur(v,lexeme_courant().chaine);
         } else {
             printf("erreur variable n'est pas définie\n");
             exit(1 );

@@ -1,0 +1,10 @@
+r := 1 ;
+x := 0;
+si x >> 1 alors
+    r := 3 ;
+    x := x-1 ;
+    x := x * 5;
+sinon
+    x := 2 ;
+    x := x * 5;
+fsi

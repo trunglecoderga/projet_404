@@ -28,7 +28,7 @@ void aff_operateur(TypeOperateur op){
 	} 
 }
 
-void afficher_ast(Ast expr) {
+/*void afficher_ast(Ast expr) {
 	if(expr == NULL){
 		printf("fin");
 		return;
@@ -69,17 +69,24 @@ void afficher_ast(Ast expr) {
 			afficher_ast(expr->gauche);
 			break;
 	}
-}
+}*/
 
 int evaluation(Ast expr) {
-      
+	int v = 0;
 	int Vg, Vd;
 	switch (expr->nature)
 	{
 	case VALEUR:
+		printf("idf = %s", expr->ident);
+		if(estPresentTS(expr->ident,&v,TS,NbSymb)){
+			return v;
+		}
+		else{
 		return expr->valeur;
+		}
 		break;
 	case OPERATION:
+		printf("dans op = %s\n", expr->gauche->ident);
 		Vg = evaluation(expr->gauche);
 		Vd = evaluation(expr->droite);
 		switch (expr->operateur)
@@ -99,6 +106,16 @@ int evaluation(Ast expr) {
 		default:
 			break;
 		}
+	/*case N_AFF:
+		printf("idf = %s\n", expr->gauche->ident);
+		if (estPresentTS(expr->gauche->ident, &v, TS, NbSymb))
+		{
+			return v;
+		}
+		else{
+			evaluation(expr->droite);
+		}
+		break;*/
 	default:
 		break;
 	}
@@ -106,26 +123,31 @@ int evaluation(Ast expr) {
 }
 
 void interpreter(Ast A){
-	switch(A->nature){
-		case N_SEPINST:
-			interpreter_aff(A->gauche);
-			interpreter_aff(A->droite);
-			break;
-		case N_AFF :
-			interpreter_aff(A);
-			break;
-		case N_LIRE:
-			interpreter_lire(A);
-			break;
-		case N_ECRIRE:
-			interpreter_ecrire(A);
-			break;
-		case N_IF:
-			interpreter_si_alors_sinon(A);
-			break;
-		default:
-			printf("erreur zyegauzeg");
-			break;
+	//printf("nature = %d\n",A->nature);
+	switch (A->nature)
+	{
+	case N_SEPINST:
+		interpreter(A->gauche);
+		interpreter(A->droite);
+		break;
+	case N_AFF:
+		interpreter_aff(A);
+		break;
+	case N_LIRE:
+		interpreter_lire(A);
+		break;
+	case N_ECRIRE:
+		interpreter_ecrire(A);
+		break;
+	case N_IF:
+		interpreter_si_alors_sinon(A);
+		break;
+/*	case N_COND:
+		printf("pas inspi\n");
+		break;*/
+	default:
+		//printf("erreur zyegauzeg\n");
+		break;
 	}
 }
 
@@ -133,12 +155,18 @@ void interpreter(Ast A){
 void interpreter_aff(Ast A){
 	char idf[20];
 	int v;
-	strcpy(idf,A->gauche->ident);
-	if(strlen(idf)==0){
+	int v2;
+	strcpy(idf, A->gauche->ident);
+	if (strlen(idf) == 0)
+	{
 		return;
 	}
+	int t = estPresentTS(idf, &v2, TS, NbSymb);
+	printf("valeur de %s = %d\n", idf, v2);
+	printf("nat = %d", A->droite->nature);
 	v = evaluation(A->droite);
-	insererTS(idf,v,TS,&NbSymb);
+	printf("Valeur v = %d\n", v);
+	insererTS(idf, v, TS, &NbSymb);
 }
 
 
@@ -162,12 +190,20 @@ void interpreter_si_alors_sinon(Ast A) {
 	//printf("valeur = %d\n",A->gauche->nature);
 	int condition = valeur_booleenne(A->gauche);
 	if (condition==1) {
-		interpreter(A->milieu->gauche);	
+		interpreter(A->milieu);	
 		return;
-	} else if (condition == 0) {
-		interpreter(A->droite->gauche);
+	} else {
+		interpreter(A->droite);
 	}
 
+}
+
+void interpreter_while(Ast A){
+	//int c = valeur_booleenne(A->gauche);
+	while(valeur_booleenne(A->gauche)){
+		interpreter(A->droite);
+	}
+	return;
 }
 
 int valeur_booleenne(Ast A){
@@ -205,12 +241,3 @@ int valeur_booleenne(Ast A){
 
 
 
-void interpreter_while(Ast A){
-	//int c = valeur_booleenne(A->gauche);
-	while(valeur_booleenne(A->gauche)){
-		printf("cond = %d\n",valeur_booleenne(A->gauche));
-		interpreter(A->droite->gauche);
-		//c = valeur_booleenne(A->gauche);
-	}
-	return;
-}

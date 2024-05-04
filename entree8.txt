@@ -1,0 +1,15 @@
+r := 1 ;
+x := 2;
+si x >> 1 alors
+    x := x+2 ;
+    x := x * 5;
+    r := r+3 ;
+    r := r*2;
+    ecrire(r);
+    ecrire(x);
+sinon
+    r:=r*2;
+    r:=r*2;
+    x := x+8 ;
+    x := x * 5;
+fsi
