@@ -1,4 +1,4 @@
-all : calculette
+all : interpreteur
 
 essai_ast: ast_construction.o  ast_parcours.o  essai_ast.o  table_symbole.o
 	gcc -g -Wall -o essai_ast ast_construction.o  ast_parcours.o  essai_ast.o table_symbole.o
@@ -30,10 +30,10 @@ test_lexeme.o: analyse_lexicale.h
 analyse_syntaxique.o: analyse_syntaxique.c analyse_syntaxique.h ast_construction.h type_ast.h ast_parcours.h table_symbole.h
 	gcc -g -Wall -c analyse_syntaxique.c 
 
-calculette.o: calculette.c analyse_syntaxique.h ast_parcours.h ast_construction.h type_ast.h table_symbole.h
+interpreteur.o: interpreteur.c analyse_syntaxique.h ast_parcours.h ast_construction.h type_ast.h table_symbole.h
 
-calculette:  analyse_lexicale.o lecture_caracteres.o analyse_syntaxique.o ast_construction.o ast_parcours.o calculette.o table_symbole.o
-	gcc -g -Wall -o calculette analyse_lexicale.o  lecture_caracteres.o analyse_syntaxique.o ast_construction.o ast_parcours.o calculette.o table_symbole.o
+interpreteur:  analyse_lexicale.o lecture_caracteres.o analyse_syntaxique.o ast_construction.o ast_parcours.o interpreteur.o table_symbole.o
+	gcc -g -Wall -o interpreteur analyse_lexicale.o  lecture_caracteres.o analyse_syntaxique.o ast_construction.o ast_parcours.o interpreteur.o table_symbole.o
 
 clean:
 	rm -f  test_lexeme calculette essai_ast *.o

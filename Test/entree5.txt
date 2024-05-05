@@ -1,8 +1,7 @@
 x := 5 ;
-v := 10 ;
 lire (a) ;
 y := x + 1 ;
-si x >> a alors
+si x << a alors
     y := x*4;
     u := 6 ;
     ecrire(u) ;

@@ -34,7 +34,6 @@
       LIRE,             // ( lire )
       ECRIRE,           // ( ecrire )
       OPCOMP,           // ( opérateur de comparaison )  ( <=, >=, ==, !=, <<, >> )
-      OPBOOL,           // ( opérateur booléen )
       SI ,              // ( si )
       ALORS,            // ( alors )
       SINON,            // ( sinon )

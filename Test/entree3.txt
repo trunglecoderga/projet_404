@@ -1,8 +1,9 @@
 x := 5;
 lire(a);
+u:=1
 si x>>a alors
-    u := 7;
+    u := u+7;
 sinon
-    u := 14;
+    u := u+14;
 fsi
 ecrire(u);

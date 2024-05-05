@@ -203,13 +203,13 @@
                      avancer_car();
                      break;
                   default:
-                     printf("erreur lexical concernant AFF\n");
+                     printf("erreur lexicale concernant AFF\n");
                      exit(0);
                      break;
                }
             } else
             {
-               printf("erreur lexical concernant AFF\n");
+               printf("erreur lexicale concernant AFF\n");
                exit(0);
             }
             break;
@@ -293,11 +293,11 @@
                   etat = E_FIN;
                   avancer_car();
                } else {
-                  printf("erreur lexical concernant COMP = !\n");
+                  printf("erreur lexicale concernant COMP = !\n");
                   exit(0);
                }
             } else {
-               printf("erreur lexical concernant COMP = !\n");
+               printf("erreur lexicale concernant COMP = !\n");
                exit(0);
             }
             break;
@@ -309,11 +309,11 @@
                   etat = E_FIN;
                   avancer_car();
                } else {
-                  printf("erreur lexical concernant COMP >\n");
+                  printf("erreur lexicale concernant COMP >\n");
                   exit(0);
                }
             } else {
-               printf("erreur lexical concernant COMP >\n");
+               printf("erreur lexicale concernant COMP >\n");
                exit(0);
             }
             break;

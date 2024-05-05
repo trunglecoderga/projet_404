@@ -25,8 +25,8 @@ void Rec_aff(Ast *resultat);
 void Rec_seq_aff(Ast *resultat);
 
 void Rec_condition(Ast *resultat);
-//azuezae
-
+void type_cond(TypeCond *cond);
+// azuezae
 
 /* - si elle ne contient pas d'erreur de syntaxe un message est affiche
    - sinon le pgm termine sur un message d'erreur */

@@ -140,6 +140,9 @@ void interpreter(Ast A){
 	case N_IF:
 		interpreter_si_alors_sinon(A);
 		break;
+	case N_WHILE:
+		interpreter_while(A);
+		break;
 	default:
 		break;
 	}
@@ -165,10 +168,10 @@ void interpreter_aff(Ast A){
 
 void interpreter_lire(Ast A){
     int v;
-    printf("Lecture entier: \n");
+    printf("Lecture entier %s: ",A->gauche->ident);
     scanf("%d",&v);
-    insererTS(A->gauche->ident,v,TS,&NbSymb);
-    //afficheTS(TS,NbSymb);
+	insererTS(A->gauche->ident, v, TS, &NbSymb);
+	//afficheTS(TS,NbSymb);
 }
 
 void interpreter_ecrire(Ast A){

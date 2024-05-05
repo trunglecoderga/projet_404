@@ -1,5 +1,0 @@
-Ab2 := 5 - 2 ;
-var := 2 * 3 ;
-a := var + Ab2;
-lire(a);
-lire(var);
