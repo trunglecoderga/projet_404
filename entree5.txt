@@ -10,6 +10,7 @@ sinon
     u := 7;
     w := 9 ;
     ecrire(u);
+    ecrire(w);
 fsi 
 z := u*2 ;
 ecrire(z);

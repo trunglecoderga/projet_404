@@ -91,7 +91,7 @@
      // on utilise ensuite un automate pour reconnaitre et construire le prochain lexeme
 
    while (etat != E_FIN) {
-      printf("%c\n",caractere_courant());     // pour débugger
+      //printf("%c\n",caractere_courant());     // pour débugger
       switch (etat) {
 
 		   case E_INIT:   /******  ETAT INITIAL  ******/

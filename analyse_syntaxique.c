@@ -20,7 +20,7 @@ void Rec_pgm(Ast *resultat) {
 }
 
 void type_cond(TypeCond *cond){
-    char *lexeme = lexeme_courant().chaine; // Assuming lexeme_courant() returns a structure with a string field 'chaine'
+    char *lexeme = lexeme_courant().chaine; 
 
     if (strcmp(lexeme, "<=") == 0) {
         *cond = N_INFEGAL;
@@ -42,15 +42,14 @@ void type_cond(TypeCond *cond){
 
 void Rec_condition(Ast *Acond) {
     Ast Ag,Ad;
-    int t ;
     TypeCond cond;
     Rec_eag(&Ag);
-    t = evaluation(Ag);
-    printf("Ag valeur = %d\n",t);
+    //int t = evaluation(Ag);
+    //printf("Ag valeur = %d\n",t);
     if (lexeme_courant().nature == OPCOMP) {
-        printf("condition = %s\n",lexeme_courant().chaine);
+        //printf("condition = %s\n",lexeme_courant().chaine);
         type_cond(&cond);
-    printf("Condition = %d\n",cond);
+    //printf("Condition = %d\n",cond);
         avancer();
         Rec_eag(&Ad);
         *Acond = creer_cond(cond,Ag,Ad);
@@ -92,7 +91,8 @@ void Rec_inst(Ast *resultat) {
                 Rec_eag(&Ad);
                 *resultat = creer_aff(Ag, Ad);
                 if(c==1){
-                interpreter_aff(*resultat);}
+                interpreter_aff(*resultat);
+                }
                 else{
                     if(estPresentTS2(Ag->ident,TS,NbSymb)==0){          
                     insererTS(Ag->ident,0,TS,&NbSymb);}}
@@ -110,10 +110,18 @@ void Rec_inst(Ast *resultat) {
                     //insererTS(lexeme_courant().chaine,0,TS,&NbSymb);
                     avancer();
                     *resultat = creer_lire(Ag);
-                    if(c==1){
-                    interpreter_lire(*resultat);}
-                    if (lexeme_courant().nature == PARF) {
-                        avancer();
+
+                if (lexeme_courant().nature == PARF) {
+                    avancer();
+                    if(lexeme_courant().nature == SEPAFF){
+                        if(c==1){
+                            interpreter_lire(*resultat);
+                        }
+                        }
+                        else{
+                            printf("Erreur : ';' manquant\n");
+                            exit(1);
+                        }
                     } else {
                         printf("Erreur: Parenthèse fermante manquante\n");
                         exit(1);
@@ -133,10 +141,19 @@ void Rec_inst(Ast *resultat) {
                 avancer();
                 Rec_eag(&Ag);
                 *resultat = creer_ecrire(Ag);
-                if(c==1){
-                interpreter_ecrire(*resultat);}
+
                 if (lexeme_courant().nature == PARF) {
                     avancer();
+                if(lexeme_courant().nature == SEPAFF){
+                if(c==1){
+                    interpreter_ecrire(*resultat);
+                }
+                    //avancer();
+                }
+                else{
+                    printf("Erreur : ';' manquant\n");
+                    exit(1);
+                }
                 } else {
                     printf("Erreur: Parenthèse fermante manquante\n");
                     exit(1);
@@ -150,7 +167,7 @@ void Rec_inst(Ast *resultat) {
             avancer();
             Rec_condition(&Acond);
             c = valeur_booleenne(Acond);
-            printf("c = %d\n",c);
+            //printf("c = %d\n",c);
             if (lexeme_courant().nature==ALORS) {
                 avancer();
                 Rec_seq_inst(&Athen);
@@ -167,14 +184,14 @@ void Rec_inst(Ast *resultat) {
                         break;
                         default:break;
                     }
-                    printf("Sinon c = %d\n",c);
+                    //printf("Sinon c = %d\n",c);
                     Rec_seq_inst(&Aelse);
                     if (lexeme_courant().nature==FSI) {
                         avancer();
                        
                         *resultat = creer_if(Acond, Athen, Aelse);
                         interpreter_si_alors_sinon(*resultat);
-                        afficheTS(TS,NbSymb);
+                        //afficheTS(TS,NbSymb);
                         c=1;
                     } else {
                         printf("Erreur: FSI manquant\n");
@@ -199,10 +216,19 @@ void Rec_inst(Ast *resultat) {
                 Rec_seq_inst(&Abody);
                 if(lexeme_courant().nature == FAIT){
                     avancer();
-                    printf("avant\n");
-                    afficheTS(TS,NbSymb);
-                    *resultat = creer_while(Acond2,Abody);
-                    interpreter_while(*resultat);
+                    //printf("avant\n");
+                    //afficheTS(TS,NbSymb);
+
+                    if(lexeme_courant().nature== SEPAFF ){
+                        *resultat = creer_while(Acond2,Abody);
+                        interpreter_while(*resultat);
+                        c++;
+                        avancer();
+                    }
+                    else{
+                        printf("Erreur : ';' manquant\n");
+                        exit(1);
+                    }
                 }
                 else{
                     printf("Erreur : FAIT manquant\n");
@@ -243,14 +269,13 @@ void Rec_facteur(Ast *resultat) {
         }
         break;
     case MOINS:
-        //printf("rer");
         avancer();
         Ast A1;
         Rec_facteur(&A1);
         *resultat = creer_op_unaire(U_MOINS,A1);
         break;
     case IDF:
-        printf("lexeme courant: %s\n", lexeme_courant().chaine);
+        //printf("lexeme courant: %s\n", lexeme_courant().chaine);
         //printf("lexeme courant nature: %d\n", lexeme_courant().nature);
         //afficheTS(TS, NbSymb);
         trouve = estPresentTS(lexeme_courant().chaine, &v, TS, NbSymb);

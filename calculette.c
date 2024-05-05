@@ -16,17 +16,17 @@ int main(int argc, char *argv[]) {
 
     Ast arbre = NULL; // Pas besoin d'allouer de la mémoire ici, la création se fera dans la fonction analyser
     analyser(argv[1], &arbre);
-    printf("Pas d'erreur syntaxique\n");
+    //printf("Pas d'erreur syntaxique\n");
     if (arbre != NULL) {
 
         //Utilisez la fonction d'évaluation ici si nécessaire
       //  evaluation(arbre);
-        //interpreter(arbre);
         //printf("Résultat : %d\n", resultat);
 
         // Affiche l'arbre
         //afficher_ast(arbre);
-        afficheTS(TS, NbSymb);
+        //interpreter(arbre);
+        // afficheTS(TS, NbSymb);
         printf("fin!\n"); 
         
     }
