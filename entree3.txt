@@ -1,7 +1,0 @@
-x := 5;
-lire(a);
-si x>>a alors
-    u := 7;
-sinon
-    u := 14;
-fsi

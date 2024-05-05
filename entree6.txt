@@ -1,8 +1,0 @@
-r := 1 ;
-x := 2;
-si x >> 1 alors
-    r := 3 ;
-    x := x-1 ;
-sinon
-    x := 2 ;
-fsi

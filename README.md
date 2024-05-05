@@ -1,9 +1,42 @@
-Tp6:
-analyse syntaxique bon
-Manque affichage.
-reglé segfault (je crois)
+Pour compiler l'interpreteur:
+make
+ou
+make interpreteur
 
-Prlbm:
--comme dn=ans rec_inst on skip la creation de l'arbre, il est mal consruit donc prlb a affichege + interpreter
-- dans le cas LIRE de rec_inst, si on donne pas de valeur a la variable que on lit, il y a un prlbm si elle est utlisé dans un calcul + tard donc soit inserer dans TS avec 0 soit interpreter_lire()
 
+Pour lancer l'interpreteur:
+./interpreteur Test/nomfichier.txt
+
+
+
+Les programmes sont dans le sous répertoire Test
+
+Tests TP5(variables):
+-entree0.txt
+-entree1.txt
+
+Tests TP6(lire/écrire):
+-entree2.txt
+
+Tests TP7(inst conditionnelle):
+-entree3.txt
+-entree4.txt
+-entree5.txt
+-entree6.txt
+-entree7.txt
+
+Tests TP8(boucle):
+-entree8.txt
+-entree9.txt
+-entree10.txt
+-entree11.txt
+
+Test erreur lexicale:
+-entreefl.txt
+-entreefl2.txt
+
+Test erreur syntaxique:
+-entreefsynt.txt
+
+Test erreur sémantique:
+-entreefsem.txt

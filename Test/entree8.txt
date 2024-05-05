@@ -1,10 +1,11 @@
 r := 0 ;
 lire(x);
-tanque x >> 1 faire
+tanque x >> 0 faire
     r := r + 1 ;
-    ecrire(r);
     x := x-1 ;
 fait;
 ecrire(r);
 ecrire(x);
+w := r*4;
+ecrire(w);
 

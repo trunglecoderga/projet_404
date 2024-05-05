@@ -77,7 +77,6 @@ int evaluation(Ast expr) {
 	switch (expr->nature)
 	{
 	case VALEUR:
-		printf("idf = %s", expr->ident);
 		if(estPresentTS(expr->ident,&v,TS,NbSymb)){
 			return v;
 		}
@@ -86,7 +85,6 @@ int evaluation(Ast expr) {
 		}
 		break;
 	case OPERATION:
-		printf("dans op = %s\n", expr->gauche->ident);
 		Vg = evaluation(expr->gauche);
 		Vd = evaluation(expr->droite);
 		switch (expr->operateur)
@@ -142,11 +140,10 @@ void interpreter(Ast A){
 	case N_IF:
 		interpreter_si_alors_sinon(A);
 		break;
-/*	case N_COND:
-		printf("pas inspi\n");
-		break;*/
+	case N_WHILE:
+		interpreter_while(A);
+		break;
 	default:
-		//printf("erreur zyegauzeg\n");
 		break;
 	}
 }
@@ -155,17 +152,15 @@ void interpreter(Ast A){
 void interpreter_aff(Ast A){
 	char idf[20];
 	int v;
-	int v2;
 	strcpy(idf, A->gauche->ident);
 	if (strlen(idf) == 0)
 	{
 		return;
 	}
-	int t = estPresentTS(idf, &v2, TS, NbSymb);
-	printf("valeur de %s = %d\n", idf, v2);
-	printf("nat = %d", A->droite->nature);
+	//printf("valeur de %s = %d\n", idf, v2);
+	//printf("nat = %d", A->droite->nature);
 	v = evaluation(A->droite);
-	printf("Valeur v = %d\n", v);
+	//printf("Valeur v = %d\n", v);
 	insererTS(idf, v, TS, &NbSymb);
 }
 
@@ -173,16 +168,16 @@ void interpreter_aff(Ast A){
 
 void interpreter_lire(Ast A){
     int v;
-    printf("lecture entier: \n");
+    printf("Lecture entier %s: ",A->gauche->ident);
     scanf("%d",&v);
-    insererTS(A->gauche->ident,v,TS,&NbSymb);
-    //afficheTS(TS,NbSymb);
+	insererTS(A->gauche->ident, v, TS, &NbSymb);
+	//afficheTS(TS,NbSymb);
 }
 
 void interpreter_ecrire(Ast A){
     int v;
     v = evaluation(A->gauche);
-    printf("ecriture : %d\n",v);
+    printf("Écriture %s: %d\n",A->gauche->ident,v);
 }
 
 void interpreter_si_alors_sinon(Ast A) {
@@ -199,7 +194,6 @@ void interpreter_si_alors_sinon(Ast A) {
 }
 
 void interpreter_while(Ast A){
-	//int c = valeur_booleenne(A->gauche);
 	while(valeur_booleenne(A->gauche)){
 		interpreter(A->droite);
 	}
@@ -209,10 +203,7 @@ void interpreter_while(Ast A){
 int valeur_booleenne(Ast A){
 	int valeurg, valeurd;
 	valeurg = evaluation(A->gauche);
-	printf("valg = %d\n",valeurg);
 	valeurd = evaluation(A->droite);
-	printf("vald = %d\n",valeurd);
-	//printf("nature comparaison:%d\n",A->nature);
 	switch (A->cond) {
 		case N_SUP:
 			return  valeurg > valeurd;
@@ -233,7 +224,7 @@ int valeur_booleenne(Ast A){
 			return valeurg != valeurd;
 			break;
 		default:
-			printf("erreur concernant évaluation de la condition\n");
+			printf("Erreur concernant évaluation de la condition\n");
 			exit(1);
 	}
 }
